@@ -27,7 +27,7 @@
                 ResultSet r = s.executeQuery(verifica);
                 if(r.next())
                 {
-                    out.println("<h1>Username già in uso</h1>");
+                    out.println("Username gia in uso, tornare indietro per rifare la registrazione");
                 }
                 else{
                     String query = "INSERT INTO Entità(username,password,paese) VALUES('"+user+"','"+psw+"','"+paese+"')";  
