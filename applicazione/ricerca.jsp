@@ -1,4 +1,17 @@
 <html>
+    <head>
+        <style>
+            table {
+                border-collapse:collapse;
+                table-layout:fixed;
+                width: 100%;
+            }
+            td, th {
+                border:1px solid #ddd;
+                padding:8px;
+            }
+        </style>
+    </head>
     <body>
         <h1> Benvenuto nella pagina di ricerca</h1>
         <h2>Indicare sport e giorno di cui si fa la richiesta</h2>
@@ -29,10 +42,28 @@
                 ricerca = "SELECT username,sport,giorno,orario,paese,via,numero,provincia,prenotato FROM Prenotazioni WHERE sport = '"+Sport+"' AND giorno = '"+Giorno+"' AND prenotato = 'No';";
                 Statement s = connection.createStatement();
                 ResultSet r = s.executeQuery(ricerca);            
-                if((Sport != null) && (Giorno != null)){                                                
+                if((Sport != null) && (Giorno != null)){                                                    
+                        out.println("<table>"); 
+                        out.println("<tr>");
+                            out.println("<th>Sede ospitante</th>");
+                            out.println("<th>Orario disponibile</th>");
+                            out.println("<th>Provincia</th>");
+                            out.println("<th>Paese</th>");
+                            out.println("<th>Via</th>"); 
+                            out.println("<th>Numero</th>");      
+                        out.println("</tr>"); 
+                        out.println("</table>");
                         while(r.next()){
-                            out.println("La sede ospitante e': "+r.getString(1)+". L'orario disponibile e': "+r.getString(4)+". Si trova in provincia di: "+r.getString(8)+". Il campo si trova a: "+r.getString(5)+". In via e numero: "+r.getString(6)+" "+r.getString(7));
-                            out.println("<br>");
+                            out.println("<table>"); 
+                                out.println("<tr>");
+                                    out.println("<td>"+r.getString(1)+"</td>");
+                                    out.println("<td>"+r.getString(4)+"</td>");
+                                    out.println("<td>"+r.getString(8)+"</td>");
+                                    out.println("<td>"+r.getString(5)+"</td>");
+                                    out.println("<td>"+r.getString(6)+"</td>");
+                                    out.println("<td>"+r.getString(7)+"</td>");
+                                out.println("</tr>");
+                            out.println("</table>");
                         }
                 }    
             }                     
@@ -40,6 +71,8 @@
                 out.println(e);
             }      
         %>
-        <input type="button" onclick="location.href='prenotazione.jsp'" value="Prenota"/>
+        <br>
+        <input type="button" id="btn" name="btn" onclick="location.href='prenotazione.jsp'" value="Prenota"/>
+
     </body>
 </html>

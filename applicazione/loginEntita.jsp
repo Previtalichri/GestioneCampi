@@ -26,7 +26,9 @@
             out.println("Errore: Impossibile caricare il Driver Ucanaccess");
         }
         try{
+            HttpSession s = request.getSession();         
             user=request.getParameter("username");
+            String dataValue=user;
             psw=request.getParameter("password");
             connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
             String query = "SELECT username,password FROM Entità WHERE username = '"+user+"'AND password = '"+psw+"';"; 
@@ -34,7 +36,8 @@
             Statement st = connection.createStatement();
             ResultSet result = st.executeQuery(query);
             
-            if(result.next()){         
+            if(result.next()){  
+                s.setAttribute("username",dataValue);        
                 response.sendRedirect("Entita.html"); 
             }
             else{

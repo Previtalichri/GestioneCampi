@@ -4,7 +4,6 @@
         <h2>Inserire username,sport,giorno,orario,paese e provincia della disponibilita da eliminare</h2>
         <h3>Attenzione se verra immmessa una informazione non valida, non cambiera niente all'interno del database</h3>
         <form action="rimozioneCamp.jsp" method="POST">
-            <input type="text" id="username" name="username" placeholder="username" required>
             <input type="text" id="sport" name="sport" placeholder="sport" required>            
             <input type="text" id="giorno" name="giorno" placeholder="giorno" required>
             <input type="text" id="orario" name="orario" placeholder="orario" required>
@@ -19,7 +18,7 @@
                 <%@ page import="java.util.concurrent.TimeUnit" %>
                 <%
                     String DRIVER = "net.ucanaccess.jdbc.UcanaccessDriver";
-                    String user = request.getParameter("username");
+                    String user = null;
                     String Sport = request.getParameter("sport");
                     String Giorno = request.getParameter("giorno");
                     String ora = request.getParameter("orario");
@@ -35,6 +34,8 @@
                         out.println("Errore: Impossibile caricare il Driver Ucanaccess");
                     }
                     try{
+                        HttpSession s = request.getSession();
+                        user = (String)s.getAttribute("username");
                         connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
                         verifica = "SELECT username FROM Entità WHERE username = '"+user+"';";
                         Statement st = connection.createStatement();
@@ -43,8 +44,7 @@
                         if((user !=null) && (Sport != null) && (Giorno != null) && (ora != null) && (Paese != null) && (prov != null)){
                             if (result.next()){
                                 query = "DELETE * FROM Prenotazioni WHERE username = '"+user+"'AND sport = '"+Sport+"'AND giorno = '"+Giorno+"'AND orario = '"+ora+"'AND paese = '"+Paese+"'AND provincia = '"+prov+"';";
-                                Statement s = connection.createStatement();
-                                s.executeUpdate(query);
+                                st.executeUpdate(query);
                             }
                             
                         }

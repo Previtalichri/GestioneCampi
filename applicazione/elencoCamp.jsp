@@ -1,4 +1,17 @@
 <html>
+    <head>
+        <style>
+            table {
+                border-collapse:collapse;
+                table-layout:fixed;
+                width: 100%;
+            }
+            td, th {
+                border:1px solid #ddd;
+                padding:8px;
+            }
+        </style>
+    </head>
     <body>
         <h1>Benvenuto nella pagina di visualizzazione delle varie disponibilità</h1>
         <h2>Indicare l'username</h2>
@@ -13,9 +26,9 @@
         <%@ page import="net.ucanaccess.jdbc.UcanaccessSQLException" %>
         <%
             String DRIVER = "net.ucanaccess.jdbc.UcanaccessDriver";
-            String User = request.getParameter("username");
             Connection connection=null;
             String ricerca;
+            String User=null;
             try{
                 Class.forName(DRIVER);
             }
@@ -23,21 +36,47 @@
                 out.println("Errore: Impossibile caricare il Driver Ucanaccess");
             }
             try{
+                HttpSession s = request.getSession();
+                User = (String)s.getAttribute("username");
                 connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
                 ricerca = "SELECT username,sport,giorno,orario,paese,via,numero,provincia,prenotato FROM Prenotazioni WHERE username = '"+User+"';";
-                Statement s = connection.createStatement();
-                ResultSet r = s.executeQuery(ricerca);            
+                Statement st = connection.createStatement();
+                ResultSet r = st.executeQuery(ricerca);            
                 if(User != null){                                                
-                        while(r.next()){
-                            out.println("Per la sede indicata: "+r.getString(1)+". Sport: "+r.getString(2)+". Giorno: "+r.getString(3)+". L'orario dato disponibile e': "+r.getString(4)+". Si trova in provincia di: "+r.getString(8)+". Il campo si trova a: "+r.getString(5)+". In via e numero: "+r.getString(6)+" "+r.getString(7));
-                            out.println("<br>");
-                        }
-                }    
-            }                     
+                        out.println("<table>"); 
+                            out.println("<tr>");
+                                out.println("<th>Sede</th>");
+                                out.println("<th>Sport</th>");
+                                out.println("<th>Giorno</th>");
+                                out.println("<th>Orario</th>");
+                                out.println("<th>Provincia</th>"); 
+                                out.println("<th>Paese</th>");   
+                                out.println("<th>Via</th>");
+                                out.println("<th>Numero</th>");   
+                            out.println("</tr>"); 
+                            out.println("</table>");
+                            while(r.next()){
+                                out.println("<table>"); 
+                                    out.println("<tr>");
+                                        out.println("<td>"+r.getString(1)+"</td>");
+                                        out.println("<td>"+r.getString(2)+"</td>");
+                                        out.println("<td>"+r.getString(3)+"</td>");
+                                        out.println("<td>"+r.getString(4)+"</td>");
+                                        out.println("<td>"+r.getString(8)+"</td>");
+                                        out.println("<td>"+r.getString(5)+"</td>");
+                                        out.println("<td>"+r.getString(6)+"</td>");
+                                        out.println("<td>"+r.getString(7)+"</td>");
+                                    out.println("</tr>");
+                                out.println("</table>");
+                            }    
+                } 
+            }                   
             catch(Exception e){
                 out.println(e);
-            }      
+            } 
+
         %>
+        <br>
         <input type="button" onclick="location.href='rimozioneCamp.jsp'" value="Metti a disposizione"/>
     </body>
 </html>

@@ -5,7 +5,6 @@
         <h3>Attenzione se verra immmessa una informazione non valida, non cambiera niente all'interno del database</h3>
         <form action="prenotazione.jsp" method="POST">
             <input type="text" id="username" name="username" placeholder="sede ospitante" required>
-            <input type="text" id="user" name="user" placeholder="username" required> <!--Questo verrà poi eliminato grazie alle sessioni-->
             <input type="text" id="sport" name="sport" placeholder="sport" required>            
             <input type="text" id="giorno" name="giorno" placeholder="giorno" required>
             <input type="text" id="orario" name="orario" placeholder="orario" required>
@@ -25,9 +24,9 @@
                     String Giorno = request.getParameter("giorno");
                     String ora = request.getParameter("orario");
                     String Paese = request.getParameter("paese");
-                    String prov = request.getParameter("provincia");
-                    String User = request.getParameter("user");
+                    String prov = request.getParameter("provincia");                  
                     Connection connection=null;
+                    String User=null;
                     String query;
                     String verifica;
                     try{
@@ -38,6 +37,8 @@
                     }
 
                     try{
+                        HttpSession s = request.getSession();
+                        User = (String)s.getAttribute("username");
                         connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
                         verifica = "SELECT username FROM Entità WHERE username = '"+sede+"';";
                         Statement st = connection.createStatement();
@@ -45,9 +46,8 @@
                         
                         if( (User != null) && (sede !=null) && (Sport != null) && (Giorno != null) && (ora != null) && (Paese != null) && (prov != null)){
                             if (result.next()){
-                                query = "UPDATE Prenotazioni SET prenotato = '"+User+"' WHERE username = '"+sede+"'AND sport = '"+Sport+"'AND giorno = '"+Giorno+"'AND orario = '"+ora+"'AND paese = '"+Paese+"'AND provincia = '"+prov+"';"; //cancellare la prenotazione del sede... e username di colui che vuole cancellare(anche se potrebbe non servire visto che ui in realtà neanche visualizza le altre prenotazioni)
-                                Statement s = connection.createStatement();
-                                s.executeUpdate(query);
+                                query = "UPDATE Prenotazioni SET prenotato = '"+User+"' WHERE username = '"+sede+"'AND sport = '"+Sport+"'AND giorno = '"+Giorno+"'AND orario = '"+ora+"'AND paese = '"+Paese+"'AND provincia = '"+prov+"';"; //cancellare la prenotazione del sede... e username di colui che vuole cancellare(anche se potrebbe non servire visto che ui in realtà neanche visualizza le altre prenotazioni)                               
+                                st.executeUpdate(query);
                             }
                             
                         }

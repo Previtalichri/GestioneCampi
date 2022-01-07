@@ -6,7 +6,7 @@
         <h3>Attenzione se verra immmessa una informazione non valida, non cambiera niente all'interno del database</h3>
         <form action="rimozionePren.jsp" method="POST">
             <input type="text" id="username" name="username" placeholder="sede ospitante" required>
-            <input type="text" id="user" name="user" placeholder="username" required>
+
             <input type="text" id="sport" name="sport" placeholder="sport" required>            
             <input type="text" id="giorno" name="giorno" placeholder="giorno" required>
             <input type="text" id="orario" name="orario" placeholder="orario" required>
@@ -27,7 +27,7 @@
                     String ora = request.getParameter("orario");
                     String Paese = request.getParameter("paese");
                     String prov = request.getParameter("provincia");
-                    String User = request.getParameter("user");
+                    String User = null;
                     Connection connection=null;
                     String query;
                     String verifica;
@@ -39,6 +39,8 @@
                     }
 
                     try{
+                        HttpSession s = request.getSession();
+                        User = (String)s.getAttribute("username");
                         connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
                         verifica = "SELECT username FROM Entità WHERE username = '"+sede+"';";
                         Statement st = connection.createStatement();
@@ -47,8 +49,7 @@
                         if((sede !=null) && (User != null) && (Sport != null) && (Giorno != null) && (ora != null) && (Paese != null) && (prov != null)){
                             if (result.next()){
                                 query = "UPDATE Prenotazioni SET prenotato = 'No' WHERE username = '"+sede+"'AND sport = '"+Sport+"'AND giorno = '"+Giorno+"'AND orario = '"+ora+"'AND paese = '"+Paese+"'AND provincia = '"+prov+"'AND prenotato = '"+User+"';";
-                                Statement s = connection.createStatement();
-                                s.executeUpdate(query);
+                                st.executeUpdate(query);
                             }
                             
                         }
