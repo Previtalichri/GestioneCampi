@@ -1,0 +1,99 @@
+1) Registrazione utente
+end-point:	 /registrazioneUtente POST
+input:		 		username:stringa (univoco)
+				password:stringa
+				*email:stringa (per ricevere la conferma della prenotazione)*
+
+
+output:		"Registrazione avvenuta con successo"			
+			redirect alla pagina iniziale con il login 
+
+2)Login uguale per entrambi ma due servlet diverse
+end-point: 	 /login POST
+input:			username:stringa 
+				password:stringa
+
+output: 	redirect pagina di ricerca(index con apposita tab di ricerca)
+			sessione{
+				username:stringa
+			}
+			
+3) Registrazione entità
+end-point:  /registrazionePaese POST
+input: 			username:stringa	
+				password:stringa
+	
+output: 	"Registrazione avvenuta con successo"			
+			redirect alla pagina iniziale con il login
+			
+4)Messa a disposizione 
+end-point: 	/disposizione POST
+input: 			sport:stringa
+				giorni:data
+				orari:stringa
+				paese:stringa  (preso dal database)
+				via:stringa
+				numero:int
+				provincia:stringa (serve per la ricerca più o meno specifica dell'utente)
+				
+				
+output:		cambiamento del database
+
+5)Visualizzazione messa a disposizione
+end-point 	/elencoPen POST
+output: 	elenco disponibilità per ogni username
+			Sessioni{
+				username:stringa
+			} 			
+
+6)Rimozione "messa a disposizione"
+end-point   /removeDisp POST
+input: 			sport:stringa
+				giorni:data
+				orario:stringa
+				paese:strina
+				via:stringa
+				numero:int
+				provincia:stringa
+				
+output: 	Query al database per eliminare la disposizione => "Rimossione avvenuta con successo"
+
+7)Ricerca campo
+end-point	/ricerca POST
+input: 			sport:stringa
+				paese:stringa
+				provincia:stringa 
+				giorno:data
+				
+output:		visualizzazione disponibilità
+
+8)Prenotazione campo
+end-point 	/prenotazione POST
+input: 			selezione orari disponibili
+
+output:		email di prenotazione avvenuta con successo
+
+9)Rimozione prenotazione
+end-point	/removePren POST
+Si rimuove dall'apposito elenco delle prenotazioni (ci sarà un pulsante apposito)=> da implementare
+Sessioni{
+				username:stringa
+			}
+
+
+10)Elenco prenotazioni
+end-point 	/elencoPen POST
+output: 	elenco prenotazione per ogni username
+			Sessioni{
+				username:stringa
+			}
+			
+
+									
+	
+			
+
+			
+			 
+
+				
