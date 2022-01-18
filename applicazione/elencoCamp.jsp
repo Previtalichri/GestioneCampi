@@ -14,11 +14,6 @@
     </head>
     <body>
         <h1>Benvenuto nella pagina di visualizzazione delle varie disponibilità</h1>
-        <h2>Indicare l'username</h2>
-        <form action="elencoCamp.jsp" method="POST">
-            <input type="text" id="username" name="username" placeholder="username" required> <!-- questo sarà preso dalle sessioni-->
-            <input type="submit" id="btn" name="btn" value="Visualizza">
-        </form>
         <%@ page import="java.io.*" %>
         <%@ page import="java.sql.*" %>
         <%@ page import="java.util.*" %>
@@ -39,7 +34,7 @@
                 HttpSession s = request.getSession();
                 User = (String)s.getAttribute("username");
                 connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
-                ricerca = "SELECT username,sport,giorno,orario,paese,via,numero,provincia,prenotato FROM Prenotazioni WHERE username = '"+User+"';";
+                ricerca = "SELECT username,sport,orario,paese,via,numero,provincia,prenotato,data FROM Prenotazioni WHERE username = '"+User+"';";
                 Statement st = connection.createStatement();
                 ResultSet r = st.executeQuery(ricerca);            
                 if(User != null){                                                
@@ -47,12 +42,13 @@
                             out.println("<tr>");
                                 out.println("<th>Sede</th>");
                                 out.println("<th>Sport</th>");
-                                out.println("<th>Giorno</th>");
                                 out.println("<th>Orario</th>");
                                 out.println("<th>Provincia</th>"); 
                                 out.println("<th>Paese</th>");   
                                 out.println("<th>Via</th>");
-                                out.println("<th>Numero</th>");   
+                                out.println("<th>Numero</th>"); 
+                                out.println("<th>Data</th>");
+                                out.println("<th>Rimuovi disponibilita</th>");
                             out.println("</tr>"); 
                             out.println("</table>");
                             while(r.next()){
@@ -61,11 +57,12 @@
                                         out.println("<td>"+r.getString(1)+"</td>");
                                         out.println("<td>"+r.getString(2)+"</td>");
                                         out.println("<td>"+r.getString(3)+"</td>");
+                                        out.println("<td>"+r.getString(7)+"</td>");
                                         out.println("<td>"+r.getString(4)+"</td>");
-                                        out.println("<td>"+r.getString(8)+"</td>");
                                         out.println("<td>"+r.getString(5)+"</td>");
                                         out.println("<td>"+r.getString(6)+"</td>");
-                                        out.println("<td>"+r.getString(7)+"</td>");
+                                        out.println("<td>"+r.getString(9)+"</td>");
+                                        out.print("<td><a href='rimozioneCamp.jsp?username="+r.getString(1)+"&sport="+r.getString(2)+"&orario="+r.getString(3)+"&paese="+r.getString(4)+"&provincia="+r.getString(7)+"&data="+r.getString(9)+"'>Rimuovi</a></td>");
                                     out.println("</tr>");
                                 out.println("</table>");
                             }    
@@ -76,7 +73,5 @@
             } 
 
         %>
-        <br>
-        <input type="button" onclick="location.href='rimozioneCamp.jsp'" value="Metti a disposizione"/>
     </body>
 </html>
