@@ -98,7 +98,7 @@
                                     out.println("<td>"+r.getString(4)+"</td>");
                                     out.println("<td>"+r.getString(5)+"</td>");
                                     out.println("<td>"+r.getString(6)+"</td>"); 
-                                    out.println("<td><a href='prenotazione.jsp'>Prenota qui</a></td>");
+                                    out.print("<td><a href='prenotazione.jsp?sede="+r.getString(1)+"'>Clicca qui per completare la prenotazione</a></td>");
                                 out.println("</tr>");
                             out.println("</table>");
                         }
