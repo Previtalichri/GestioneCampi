@@ -9,13 +9,12 @@
                     String DRIVER = "net.ucanaccess.jdbc.UcanaccessDriver";
                     Connection connection=null;
                     String user = null;
+                    String prov=null;
                     String Sport = request.getParameter("sport");
-                    String Data = request.getParameter("data");
-                    String ora = request.getParameter("orario");
-                    String Paese = request.getParameter("paese");
-                    String prov = request.getParameter("provincia");
-                    String query;
-                    String verifica;
+                    String Comune = request.getParameter("comune");
+                    String num = request.getParameter("numero");
+                    String Via = request.getParameter("via");
+                    String query = null;
                     try{
                         Class.forName(DRIVER);
                     }
@@ -25,23 +24,17 @@
                     try{
                         HttpSession s = request.getSession();
                         user = (String)s.getAttribute("username");
+                        prov = (String)s.getAttribute("provincia");
                         connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
-                        verifica = "SELECT username FROM Gestori WHERE username = '"+user+"';";
-                        Statement st = connection.createStatement();
-                        ResultSet result = st.executeQuery(verifica);
-                        
-                        if((user !=null) && (Sport != null) && (Data != null) && (ora != null) && (Paese != null) && (prov != null)){
-                            if (result.next()){
-                                query = "DELETE * FROM Prenotazioni WHERE username = '"+user+"'AND sport = '"+Sport+"'AND orario = '"+ora+"'AND paese = '"+Paese+"'AND provincia = '"+prov+"'AND data = '"+Data+"';";
+                        Statement st = connection.createStatement();                       
+                                query = "DELETE * FROM Struttura WHERE Sede = '"+user+"'AND Provincia = '"+prov+"'AND Comune = '"+Comune+"'AND Via = '"+Via+"'AND Numero = '"+num+"'AND Sport = '"+Sport+"';";
                                 st.executeUpdate(query);
-                            }
-                            
-                        }
+                                System.out.println(query);
                     }
                     catch(Exception e){
                         out.println(e);
                     }
-                    if((user !=null) && (Sport != null) && (Data != null) && (ora != null) && (Paese != null) && (prov != null)){
+                    if((user !=null) && (Sport != null) && (Comune !=null)){
                         String url = "Gestore.html";
                         response.sendRedirect(url);
                     }

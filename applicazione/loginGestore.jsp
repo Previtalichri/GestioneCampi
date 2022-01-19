@@ -12,7 +12,7 @@
             <form action="loginGestore.jsp" method="POST">
             <input type="text" id="username" name="username" placeholder="username">
             <input type="password" id="password" name="password" placeholder="password">
-	    <input type="text" id="provincia" name="provincia" placeholder="provincia">
+	    <input type="text" id="provincia" name="provincia" placeholder="provincia es. BG,BS">
 
             <input type="submit" id="btn" name="btn" value="Accedi">
             </form>
@@ -21,7 +21,7 @@
         Connection connection=null;
         String user=null;
         String psw=null;
-	String prov=null;
+	    String prov=null;
         try{
             Class.forName(DRIVER);
         }
@@ -42,7 +42,7 @@
             
             if(result.next()){  
                 s.setAttribute("username",user); 
-		s.setAttribute("provincia",prov);       
+		        s.setAttribute("provincia",prov);       
                 response.sendRedirect("Gestore.html"); 
             }
             else{

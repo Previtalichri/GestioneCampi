@@ -24,6 +24,7 @@
             Connection connection=null;
             String ricerca;
             String User=null;
+            String prov=null;
             try{
                 Class.forName(DRIVER);
             }
@@ -33,36 +34,33 @@
             try{
                 HttpSession s = request.getSession();
                 User = (String)s.getAttribute("username");
+                prov = (String)s.getAttribute("provincia");
                 connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
-                ricerca = "SELECT username,sport,orario,paese,via,numero,provincia,prenotato,data FROM Prenotazioni WHERE username = '"+User+"';";
+                ricerca = "SELECT Sede,Comune,Via,Numero,Sport FROM Struttura WHERE Sede = '"+User+"';";
                 Statement st = connection.createStatement();
                 ResultSet r = st.executeQuery(ricerca);            
                 if(User != null){                                                
                         out.println("<table>"); 
                             out.println("<tr>");
                                 out.println("<th>Sede</th>");
-                                out.println("<th>Sport</th>");
-                                out.println("<th>Orario</th>");
+                                out.println("<th>Comune</th>");
                                 out.println("<th>Provincia</th>"); 
-                                out.println("<th>Paese</th>");   
                                 out.println("<th>Via</th>");
                                 out.println("<th>Numero</th>"); 
-                                out.println("<th>Data</th>");
+                                out.println("<th>Sport</th>");
                                 out.println("<th>Rimuovi disponibilita</th>");
                             out.println("</tr>"); 
                             out.println("</table>");
                             while(r.next()){
                                 out.println("<table>"); 
                                     out.println("<tr>");
-                                        out.println("<td>"+r.getString(1)+"</td>");
+                                        out.println("<td>"+User+"</td>");
                                         out.println("<td>"+r.getString(2)+"</td>");
+                                        out.println("<td>"+prov+"</td>");
                                         out.println("<td>"+r.getString(3)+"</td>");
-                                        out.println("<td>"+r.getString(7)+"</td>");
                                         out.println("<td>"+r.getString(4)+"</td>");
                                         out.println("<td>"+r.getString(5)+"</td>");
-                                        out.println("<td>"+r.getString(6)+"</td>");
-                                        out.println("<td>"+r.getString(9)+"</td>");
-                                        out.print("<td><a href='rimozioneCamp.jsp?username="+r.getString(1)+"&sport="+r.getString(2)+"&orario="+r.getString(3)+"&paese="+r.getString(4)+"&provincia="+r.getString(7)+"&data="+r.getString(9)+"'>Rimuovi</a></td>");
+                                        out.print("<td><a href='rimozioneCamp.jsp?comune="+r.getString(2)+"&via="+r.getString(3)+"&numero="+r.getString(4)+"&sport="+r.getString(5)+"'>Rimuovi</a></td>");
                                     out.println("</tr>");
                                 out.println("</table>");
                             }    

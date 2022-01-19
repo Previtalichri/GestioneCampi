@@ -25,7 +25,9 @@
                 Statement s = connection.createStatement();
                 ResultSet r = s.executeQuery(verifica);
                 if(r.next()){
-                    out.println("Username gia in uso, tornare indietro per rifare la registrazione");
+                    out.println("Username gia in uso, immettere un username differente");
+                    out.println("<br><br>");
+                    out.println("<a href='index.html'>Premi qui per tornare al login</a>");
                     
                 }
                 else{

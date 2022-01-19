@@ -19,12 +19,13 @@
     <%@ page contentType="text/html;charset=UTF-8" language="java" %>
     <%@ page import="net.ucanaccess.jdbc.UcanaccessSQLException" %>
         <h1> Benvenuto nella pagina di ricerca</h1>
-        <h2>Indicare sport e giorno di cui si fa la richiesta</h2>
+        <h2>Indicare sport e/o provincia del campo richiesto</h2>
         <form action="ricerca.jsp" method="POST">
             <%
                         String DRIVER = "net.ucanaccess.jdbc.UcanaccessDriver";
                         Connection connection=null;
                         String sportQuery=null;
+                        String provQuery=null;
                         try{
                             Class.forName(DRIVER);
                         }
@@ -33,7 +34,7 @@
                         }
                         try{
                             connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
-                            sportQuery = "SELECT tipo From Sport;";
+                            sportQuery = "SELECT tipo FROM Sport;";
                             Statement st = connection.createStatement();
                             ResultSet result = st.executeQuery(sportQuery);
                             out.println("<select name='sport' id='sport'>");
@@ -42,20 +43,28 @@
                                     out.println("<option value='"+result.getString(1)+"'>"+result.getString(1)+"</option>");
                             }
                             out.println("</select>");
+                            provQuery = "SELECT Nome FROM Province;";
+                            result = st.executeQuery(provQuery);
+                            out.println("<select name='provincia' id='provincia'>");
+                            out.println("<option value=null selected>Selezionare una provincia</option>");
+                            while(result.next()){                               
+                                    out.println("<option value='"+result.getString(1)+"'>"+result.getString(1)+"</option>");
+                            }
+                            out.println("</select>");
+
                         }
                         catch(Exception e){
                             System.out.println(e);
                         }
-                    %>
-            <input type="text" id="data" name="data" placeholder="data es. 15/01/2022">   
+                    %>  
             <input type="submit" id="btn" name="btn" value="Cerca">
         </form>
         
         <%
             String Sport = request.getParameter("sport");
-            String Data = request.getParameter("data");
+            String prov = request.getParameter("provincia");
             String ricerca;	
-	    String verifica;
+	        String verifica;
             try{
                 Class.forName(DRIVER);
             }
@@ -65,33 +74,31 @@
             try{
                 connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
 		
-                ricerca = "SELECT username,sport,orario,paese,via,numero,provincia,prenotato,data FROM Prenotazioni WHERE sport = '"+Sport+"' AND prenotato = 'No' AND data = '"+Data+"';";
+                ricerca = "SELECT Sede,Provincia,Comune,Via,Numero,Sport FROM Struttura WHERE sport = '"+Sport+"'AND Provincia = '"+prov+"';";
                 Statement s = connection.createStatement();
-                ResultSet r = s.executeQuery(ricerca);  
-                int id=0;          
-                if((Sport != null) && (Data != null)){                                                    
+                ResultSet r = s.executeQuery(ricerca);           
+                if((Sport != null) && (prov != null)){                                                    
                         out.println("<table>"); 
                         out.println("<tr>");
                             out.println("<th>Sede ospitante</th>");
-                            out.println("<th>Orario disponibile</th>");
                             out.println("<th>Provincia</th>");
-                            out.println("<th>Paese</th>");
+                            out.println("<th>Comune</th>");
                             out.println("<th>Via</th>"); 
                             out.println("<th>Numero</th>");  
-                            out.println("<th>Prenota</th");    
+                            out.println("<th>Sport</th>"); 
+                            out.println("<th>Prenota</th>");
                         out.println("</tr>"); 
                         out.println("</table>");
-                        while(r.next()){
-                            id=id+1;
+                        while(r.next()){         
                             out.println("<table>"); 
                                 out.println("<tr>");
                                     out.println("<td>"+r.getString(1)+"</td>");
+                                    out.println("<td>"+r.getString(2)+"</td>");
                                     out.println("<td>"+r.getString(3)+"</td>");
-                                    out.println("<td>"+r.getString(7)+"</td>");
                                     out.println("<td>"+r.getString(4)+"</td>");
                                     out.println("<td>"+r.getString(5)+"</td>");
-                                    out.println("<td>"+r.getString(6)+"</td>");
-                                    out.print("<td><a href='prenotazione.jsp?username="+r.getString(1)+"&sport="+Sport+"&orario="+r.getString(3)+"&paese="+r.getString(4)+"&provincia="+r.getString(7)+"&data="+Data+"'>Prenota qui</a></td>");
+                                    out.println("<td>"+r.getString(6)+"</td>"); 
+                                    out.println("<td><a href='prenotazione.jsp'>Prenota qui</a></td>");
                                 out.println("</tr>");
                             out.println("</table>");
                         }

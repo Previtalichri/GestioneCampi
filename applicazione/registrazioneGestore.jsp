@@ -9,7 +9,7 @@
             String DRIVER = "net.ucanaccess.jdbc.UcanaccessDriver";
 			String user=null;
 			String psw=null;
-            String paese=null;
+            String prov=null;
 			Connection connection=null;
             try{
                 Class.forName(DRIVER);
@@ -20,24 +20,26 @@
             try{
 				user = request.getParameter("usernameEn");
 				psw = request.getParameter("passwordEn");
-                paese = request.getParameter("paese");
+                prov = (request.getParameter("provincia")).toUpperCase();
+                
                 connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
-                String verifica = "SELECT username from Gestori WHERE username = '"+user+"';";
+                String verifica = "SELECT username,provincia from Gestori WHERE username = '"+user+"'AND provincia = '"+prov+"' ;";
                 Statement s = connection.createStatement();
                 ResultSet r = s.executeQuery(verifica);
                 if(r.next())
                 {
-                    out.println("Username gia in uso, tornare indietro per rifare la registrazione");
+                    out.println("Username e provincia gia registrati, immettere un'altro username");
+                    out.println("<br><br>");
+                    out.println("<a href='index.html'>Premi qui per tornare al login</a>");
                 }
                 else{
-                    String query = "INSERT INTO Gestori(username,password,paese) VALUES('"+user+"','"+psw+"','"+paese+"')";  
+                    String query = "INSERT INTO Gestori(username,password,provincia) VALUES('"+user+"','"+psw+"','"+prov+"')";  
                     s.executeUpdate(query);
                     String url = "loginGestore.jsp";
                     response.sendRedirect(url);     
                 }           
             }
 			catch(UcanaccessSQLException ex){
-				out.println("<h1>Nome utente già in uso</h1>");
 				out.println(ex);
 			}
             catch(Exception e){

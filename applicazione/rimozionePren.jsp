@@ -9,12 +9,9 @@
                 <%
                     String DRIVER = "net.ucanaccess.jdbc.UcanaccessDriver";
                     Connection connection=null;
-                    String sede = request.getParameter("username");
-                    String Sport = request.getParameter("sport");
+                    String sede = request.getParameter("sede");
                     String Data = request.getParameter("data");
                     String ora = request.getParameter("orario");
-                    String Paese = request.getParameter("paese");
-                    String prov = request.getParameter("provincia");
                     String User = null;
                     String query;
                     String verifica;
@@ -29,21 +26,17 @@
                         HttpSession s = request.getSession();
                         User = (String)s.getAttribute("username");
                         connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
-                        verifica = "SELECT username FROM Gestori WHERE username = '"+sede+"';";
                         Statement st = connection.createStatement();
-                        ResultSet result = st.executeQuery(verifica);
                         
-                        if((sede !=null) && (User != null) && (Sport != null) && (Data != null) && (ora != null) && (Paese != null) && (prov != null)){
-                            if (result.next()){
-                                query = "UPDATE Prenotazioni SET prenotato = 'No' WHERE username = '"+sede+"'AND sport = '"+Sport+"'AND orario = '"+ora+"'AND paese = '"+Paese+"'AND provincia = '"+prov+"'AND prenotato = '"+User+"'AND data = '"+Data+"';";
-                                st.executeUpdate(query);
-                            }                           
+                        if((sede !=null) && (User != null) && (Data != null) && (ora != null)){
+                                query = "DELETE * FROM Prenotazioni WHERE Sede = '"+sede+"'AND Utente = '"+User+"' AND orario = '"+ora+"' AND data = '"+Data+"';";
+                                st.executeUpdate(query);                          
                         }
                     }
                     catch(Exception e){
                         out.println(e);
                     }
-                    if((sede !=null) && (User != null) && (Sport != null) && (Data != null) && (ora != null) && (Paese != null) && (prov != null)){
+                    if((sede !=null) && (User != null) && (Data != null) && (ora != null)){
                         String url = "Utente.html";
                         response.sendRedirect(url);
                     }

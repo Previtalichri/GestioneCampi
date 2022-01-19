@@ -3,12 +3,14 @@
         <h1>Benvenuto nella pagina di messa a disposizione</h1>
         <h2>Qui potrai mettere a disposizione i tuoi campi</h2>
 
-                <h2>Indicare: sport,giorno,orario,paese,via,numero,provincia del campo di cui si da la disponibilita</h2>
+                <h2>Indicare: comune,via,numero,sport del campo di cui si da la disponibilita</h2>
                 <form action="disposizione.jsp" method="POST">
                     <%
                         String DRIVER = "net.ucanaccess.jdbc.UcanaccessDriver";
                         Connection connection=null;
                         String sportQuery=null;
+                        String prov=null;
+                        String comuneQuery=null;    
                         try{
                             Class.forName(DRIVER);
                         }
@@ -25,17 +27,25 @@
                             while(result.next()){                               
                                     out.println("<option value='"+result.getString(1)+"'>"+result.getString(1)+"</option>");
                             }
-                            out.println("</select>");                        
+                            out.println("</select>"); 
+                            HttpSession s = request.getSession();
+                            prov=(String)s.getAttribute("provincia"); 
+                            comuneQuery = "SELECT nome,provincia FROM Comuni WHERE provincia = '"+prov+"';"; 
+                            result = st.executeQuery(comuneQuery);
+                            out.println("<select name='comune' id ='comune'>");
+                            out.println("<option value=null selected>Selezionare un paese</option>");
+                            while(result.next()){                               
+                                    out.println("<option value='"+result.getString(1)+"'>"+result.getString(1)+"</option>");
+                            }
+                            out.println("</select>"); 
+
                         }
                         catch(Exception e){
                             System.out.println(e);
                         }
-                    %>
-                    <input type="text" id="data" name="data" placeholder="data es. 15/01/2022">             
-                    <input type="text" id="orario" name="orario" placeholder="ora es. 15-30-18:30" required>
-                    <input type="text" id="paese" name="paese" placeholder="paese" required>
+                    %>         
                     <input type="text" id="via" name="via" placeholder="via" required>
-                    <input type="numeric" id="numero" name="numero" placeholder="numero" required>
+                    <input type="number" id="numero" name="numero" placeholder="numero" min='0'required>
                     <input type="submit" id="btn" name="btn" value="Metti a disposizione">
                 </form>
                 <%@ page import="java.io.*" %>
@@ -45,16 +55,11 @@
                 <%@ page import="java.util.concurrent.TimeUnit" %>
                 <%
                     String Sport = request.getParameter("sport");   
-                    String Data = request.getParameter("data");
-                    String ora = request.getParameter("orario");
-                    String Paese = request.getParameter("paese");
+                    String Comune = request.getParameter("comune");
                     String Via = request.getParameter("via");
                     String num = request.getParameter("numero");
-                    String preno = "No";
                     String query;
-                    String verifica;
                     String user=null;
-		    String prov=null;
                     try{
                         Class.forName(DRIVER);
                     }
@@ -64,24 +69,20 @@
                     try{
                         HttpSession s = request.getSession();
                         user = (String)s.getAttribute("username");
-			prov = (String)s.getAttribute("provincia");
+			            prov = (String)s.getAttribute("provincia");
                         connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
-                        verifica = "SELECT username,provincia FROM Gestori WHERE username = '"+user+"'AND provincia= '"+prov+"';";
                         Statement stat = connection.createStatement();
-                        ResultSet r = stat.executeQuery(verifica);
                         
-                        if((user !=null) && (Sport != null) && (Data != null) && (ora != null) && (Paese != null) && (Via != null) && (num != null) && (prov != null)){
-                            if (r.next()){
-                                query = "INSERT INTO Prenotazioni(username,sport,orario,paese,via,numero,provincia,prenotato,data) VALUES('"+user+"','"+Sport+"','"+ora+"','"+Paese+"','"+Via+"','"+num+"','"+prov+"','"+preno+"','"+Data+"')"; 
-                                stat.executeUpdate(query);
-                            }
-                            
+                        if((user !=null) && (Sport != null) && (Comune != null) && (Via != null) && (num != null)){                            
+                                query = "INSERT INTO Struttura(Sede,Comune,Via,Numero,Sport) VALUES('"+user+"','"+Comune+"','"+Via+"','"+num+"','"+Sport+"');";
+                                System.out.println(query); 
+                                stat.executeUpdate(query);      
                         }
                     }
                     catch(Exception e){
                         out.println(e);
                     }
-                    if((user !=null) && (Sport != null) && (Data != null) && (ora != null) && (Paese != null) && (Via != null) && (num != null) && (prov != null)){
+                    if((user !=null) && (Sport != null) && (Comune != null) && (Via != null) && (num != null)){
                         String url = "Gestore.html";
                         response.sendRedirect(url);
                     } 
