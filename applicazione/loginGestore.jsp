@@ -12,13 +12,37 @@
             <form action="loginGestore.jsp" method="POST">
             <input type="text" id="username" name="username" placeholder="username">
             <input type="password" id="password" name="password" placeholder="password">
-	    <input type="text" id="provincia" name="provincia" placeholder="provincia es. BG,BS">
-
+            <% 
+                String DRIVER = "net.ucanaccess.jdbc.UcanaccessDriver";
+                Connection connection=null;
+                String sportQuery=null;
+                String provQuery=null;
+                ResultSet result = null;
+                try{
+                    Class.forName(DRIVER);
+                }
+                catch (ClassNotFoundException e) {
+                    out.println("Errore: Impossibile caricare il Driver Ucanaccess");
+                }
+                try{
+                    connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
+                    provQuery = "SELECT Nome FROM Province;";
+                    Statement st = connection.createStatement();
+                    result = st.executeQuery(provQuery);
+                    out.println("<select name='provincia' id='provincia'>");
+                    out.println("<option value=null selected>Selezionare una provincia</option>");
+                    while(result.next()){                               
+                            out.println("<option value='"+result.getString(1)+"'>"+result.getString(1)+"</option>");
+                    }
+                    out.println("</select>");
+                }
+                catch(Exception e){
+                    System.out.println(e);
+                }
+            %>
             <input type="submit" id="btn" name="btn" value="Accedi">
             </form>
         <%
-        String DRIVER = "net.ucanaccess.jdbc.UcanaccessDriver";
-        Connection connection=null;
         String user=null;
         String psw=null;
 	    String prov=null;
@@ -32,13 +56,12 @@
             HttpSession s = request.getSession();         
             user=request.getParameter("username");
             psw=request.getParameter("password");
-	    prov=request.getParameter("provincia");
+	        prov=request.getParameter("provincia");
 	    
-            connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
             String query = "SELECT username,password,provincia FROM Gestori WHERE username = '"+user+"'AND password = '"+psw+"'AND provincia = '"+prov+"';"; 
             
             Statement st = connection.createStatement();
-            ResultSet result = st.executeQuery(query);
+            result = st.executeQuery(query);
             
             if(result.next()){  
                 s.setAttribute("username",user); 

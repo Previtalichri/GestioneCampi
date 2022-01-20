@@ -73,8 +73,8 @@
                         connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
                         Statement stat = connection.createStatement();
                         
-                        if((user !=null) && (Sport != null) && (Comune != null) && (Via != null) && (num != null)){                            
-                                query = "INSERT INTO Struttura(Sede,Comune,Via,Numero,Sport) VALUES('"+user+"','"+Comune+"','"+Via+"','"+num+"','"+Sport+"');";
+                        if((user !=null) && (prov != null) && (Sport != null) && (Comune != null) && (Via != null) && (num != null)){                            
+                                query = "INSERT INTO Struttura(Sede,Provincia,Comune,Via,Numero,Sport) VALUES('"+user+"','"+prov+"','"+Comune+"','"+Via+"','"+num+"','"+Sport+"');";
                                 System.out.println(query); 
                                 stat.executeUpdate(query);      
                         }
@@ -82,7 +82,7 @@
                     catch(Exception e){
                         out.println(e);
                     }
-                    if((user !=null) && (Sport != null) && (Comune != null) && (Via != null) && (num != null)){
+                    if((user !=null) && (prov != null) && (Sport != null) && (Comune != null) && (Via != null) && (num != null)){
                         String url = "Gestore.html";
                         response.sendRedirect(url);
                     } 
