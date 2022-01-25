@@ -62,7 +62,7 @@
                                     st.executeUpdate(query);                                                         
                             }
                             if((User != null) && (sede !=null) && (orario != null) && (Data != null)){
-                            String url = "Utente.html";
+                            String url = "Utente.jsp";
                             response.sendRedirect(url);
                         }  
                         

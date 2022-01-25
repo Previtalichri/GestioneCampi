@@ -38,7 +38,7 @@
             
             if(result.next()){     
                 s.setAttribute("username",dataValue); // imposta i valori di sessioni    
-                response.sendRedirect("Utente.html"); 
+                response.sendRedirect("Utente.jsp"); 
                 
             }
             else{

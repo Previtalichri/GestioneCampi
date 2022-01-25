@@ -9,7 +9,7 @@
     <body>
 
         <h1>Benvenuti nella pagina di login di un gestore</h1>
-            <form action="loginGestore.jsp" method="POST">
+            <form action="loginGestore.html" method="POST">
             <input type="text" id="username" name="username" placeholder="username">
             <input type="password" id="password" name="password" placeholder="password">
             <% 
