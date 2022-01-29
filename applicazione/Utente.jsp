@@ -10,29 +10,44 @@
         <%@ page import="net.ucanaccess.jdbc.UcanaccessSQLException" %>
         <%@ page import="java.text.*" %>
         <%@ page import="java.util.Date" %>
-
+        <%@ page import="java.time.format.DateTimeFormatter" %>
+        <%@ page import="java.time.LocalDate" %>
+        
         <%
             String utente;
             String DRIVER = "net.ucanaccess.jdbc.UcanaccessDriver";
             Connection connection = null;
             String dataQuery = null;
-            SimpleDateFormat d = new SimpleDateFormat("dd/MM/yyyy");
+            String eliminazione = null;
             try{
                 Class.forName(DRIVER);
             }
             catch (ClassNotFoundException e) {
                 out.println("Errore: Impossibile caricare il Driver Ucanaccess");
-            }
-                
+            }     
             try{
-                String date =d.format(new Date());
+                DateTimeFormatter form = DateTimeFormatter.ofPattern("dd/MM/yyyy");  
+                LocalDate oggi = LocalDate.now();   
+                System.out.println(oggi);    
                 HttpSession s = request.getSession();
                 utente = (String)s.getAttribute("username");
                 connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
                 Statement st = connection.createStatement();
-                dataQuery = "DELETE * FROM Prenotazioni WHERE Utente = '"+utente+"' AND data < '"+date+"';";
-                
-                st.executeUpdate(dataQuery);  
+                dataQuery = "SELECT data FROM Prenotazioni WHERE Utente = '"+utente+"';";
+                boolean isbefore=false; 
+                ResultSet r = st.executeQuery(dataQuery); 
+                LocalDate data=null;      
+                String dataDb = null;         
+                while(r.next()){
+                    dataDb = r.getString(1);
+                    data = LocalDate.parse(dataDb,form);
+                    isbefore = data.isBefore(oggi);
+                    if(isbefore){
+                        eliminazione = "DELETE * FROM Prenotazioni WHERE Utente = '"+utente+"' AND data = '"+dataDb+"';";
+                        st.executeUpdate(eliminazione);
+
+                    }  
+                    }      
             }
             catch(Exception e){
                 System.out.println(e);
@@ -41,6 +56,5 @@
 
     </body>
 </html>
-
 
 

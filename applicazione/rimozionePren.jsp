@@ -37,7 +37,7 @@
                         out.println(e);
                     }
                     if((sede !=null) && (User != null) && (Data != null) && (ora != null)){
-                        String url = "Utente.html";
+                        String url = "Utente.jsp";
                         response.sendRedirect(url);
                     }
                 %>

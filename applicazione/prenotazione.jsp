@@ -1,10 +1,14 @@
 <html>
     <body>  
-        <%@ page import="java.io.*" %>
+                <%@ page import="java.io.*" %>
                 <%@ page import="java.sql.*" %>
                 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
                 <%@ page import="net.ucanaccess.jdbc.UcanaccessSQLException" %>
                 <%@ page import="java.util.concurrent.TimeUnit" %>
+                <%@ page import="java.util.Date" %>
+                <%@ page import="java.time.format.DateTimeFormatter" %>
+                <%@ page import="java.time.LocalDate" %>
+
                 <h1>Benvenuto nella pagina della prenotazione</h1>
                 <h2>Immettere orario e data della richiesta</h2>
                 <h3>Se l'orario e la data saranno disponibili, sarete direttamente indirizzati alla home</h3>
@@ -40,10 +44,10 @@
                     <input type="submit" id="btn" name="btn" value="Verifica disponibilità">
                 </form>
                 <%
-                    
-                     
-
                     try{
+                        DateTimeFormatter form = DateTimeFormatter.ofPattern("dd/MM/yyyy");  
+                        LocalDate oggi = LocalDate.now();
+                        LocalDate d = null;
                         String orario=request.getParameter("ora");
                         String Data=request.getParameter("data");
                         String sede = request.getParameter("sede");   
@@ -57,21 +61,26 @@
                             out.println("<h1>Orario e/o data non disponibile</h1>");
                         }
                         else {
-                            if( (User != null) && (sede !=null) && (orario != null) && (Data != null)){                               
-                                    query = "INSERT INTO Prenotazioni(Sede,Utente,orario,data) VALUES('"+sede+"','"+User+"','"+orario+"','"+Data+"');";                             
-                                    st.executeUpdate(query);                                                         
+                            if((User != null) && (sede !=null) && (orario != null) && (Data != null)){                                     
+                                    d  = LocalDate.parse(Data,form);
+                                    boolean isbefore = d.isBefore(oggi);
+                                    if(isbefore){
+                                        out.println("<h1>Immettere una date successiva a quella di oggi</h1>");  
+                                    }
+                                    else{
+                                        query = "INSERT INTO Prenotazioni(Sede,Utente,orario,data) VALUES('"+sede+"','"+User+"','"+orario+"','"+Data+"');";                             
+                                        st.executeUpdate(query);   
+                                        out.println("<h1>Prenotazione avvenuta con successo</h1>");         
+                                    }                                              
                             }
                             if((User != null) && (sede !=null) && (orario != null) && (Data != null)){
-                            String url = "Utente.jsp";
-                            response.sendRedirect(url);
-                        }  
-                        
+                            out.println("<a href='Utente.jsp'>Clicca qui per tornare alla home</a>");
+                        }                          
                     }                        
                     }
                     catch(Exception e){
                         out.println(e);
-                    }
-                    
+                    }                   
                 %>
     </body>
 </html>
