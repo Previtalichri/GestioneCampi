@@ -4,6 +4,8 @@
 <%@ page import="java.sql.Statement" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.math.BigInteger" %>
+<%@ page import="java.security.MessageDigest" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <body>
@@ -12,6 +14,21 @@
             <form action="loginGestore.jsp" method="POST">
             <input type="text" id="username" name="username" placeholder="username">
             <input type="password" id="password" name="password" placeholder="password">
+
+        <%!
+            public class MD5Util {
+                public String encrypt(String message) {
+                    try{
+                        MessageDigest m = MessageDigest.getInstance("MD5");
+                        m.update(message.getBytes());
+                        return String.format("%032x",new BigInteger(1,m.digest()));
+                    }
+                    catch(Exception e){
+                        return null;
+                    }
+                }
+            }
+    %>
             <% 
                 String DRIVER = "net.ucanaccess.jdbc.UcanaccessDriver";
                 Connection connection=null;
@@ -57,8 +74,10 @@
             user=request.getParameter("username");
             psw=request.getParameter("password");
 	        prov=request.getParameter("provincia");
+            MD5Util md = new MD5Util();
+            String cri = md.encrypt(psw); //hash della password
 	    
-            String query = "SELECT username,password,provincia FROM Gestori WHERE username = '"+user+"'AND password = '"+psw+"'AND provincia = '"+prov+"';"; 
+            String query = "SELECT username,password,provincia FROM Gestori WHERE username = '"+user+"'AND password = '"+cri+"'AND provincia = '"+prov+"';"; 
             
             Statement st = connection.createStatement();
             result = st.executeQuery(query);

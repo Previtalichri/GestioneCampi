@@ -9,20 +9,18 @@
     <body>
 
     <%!
-
-    public class MD5Util {
-        public String encrypt(String message) {
-            try{
-                MessageDigest m = MessageDigest.getInstance("MD5");
-                m.update(message.getBytes());
-                return String.format("%032x",new BigInteger(1,m.digest()));
+        public class MD5Util {
+            public String encrypt(String message) {
+                try{
+                    MessageDigest m = MessageDigest.getInstance("MD5");
+                    m.update(message.getBytes());
+                    return String.format("%032x",new BigInteger(1,m.digest()));
+                }
+                catch(Exception e){
+                    return null;
+                }
             }
-            catch(Exception e){
-                return null;
-            }
-    }
-    }
-
+        }
     %>
         <%  
             String DRIVER = "net.ucanaccess.jdbc.UcanaccessDriver";
@@ -52,10 +50,8 @@
                 else{
 
                     MD5Util md = new MD5Util();
-                    String cri = md.encrypt(psw);
-                    System.out.println(cri);
-
-                    String query = "INSERT INTO Utenti(username,password) VALUES('"+user+"','"+psw+"')";    
+                    String cri = md.encrypt(psw);//hash della password
+                    String query = "INSERT INTO Utenti(username,password) VALUES('"+user+"','"+cri+"')";    
                     s.executeUpdate(query);
                     String url = "loginUtente.jsp";
                     response.sendRedirect(url);

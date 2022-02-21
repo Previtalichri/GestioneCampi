@@ -4,6 +4,8 @@
 <%@ page import="java.sql.Statement" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.math.BigInteger" %>
+<%@ page import="java.security.MessageDigest" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <body>
@@ -13,6 +15,21 @@
             <input type="text" id="password" name="password" placeholder="password" required>
             <input type="submit" id="btn" name="btn" value="Accedi">
         </form>
+
+        <%!
+            public class MD5Util {
+                public String encrypt(String message) {
+                    try{
+                        MessageDigest m = MessageDigest.getInstance("MD5");
+                        m.update(message.getBytes());
+                        return String.format("%032x",new BigInteger(1,m.digest()));
+                    }
+                    catch(Exception e){
+                        return null;
+                    }
+                }
+            }
+    %>
 
         <%
         String DRIVER = "net.ucanaccess.jdbc.UcanaccessDriver";
@@ -28,16 +45,17 @@
         try{
             HttpSession s = request.getSession();         
             user=request.getParameter("username");
-            String dataValue=user;
             psw=request.getParameter("password");
+            MD5Util md = new MD5Util();
+            String cri = md.encrypt(psw); //hash della password
             connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
-            String query = "SELECT username,password FROM Utenti WHERE username = '"+user+"'AND password = '"+psw+"';";    
+            String query = "SELECT username,password FROM Utenti WHERE username = '"+user+"'AND password = '"+cri+"';";    
             
             Statement st = connection.createStatement();
             ResultSet result = st.executeQuery(query);
             
             if(result.next()){     
-                s.setAttribute("username",dataValue); // imposta i valori di sessioni    
+                s.setAttribute("username",user); // imposta i valori di sessioni    
                 response.sendRedirect("Utente.jsp"); 
                 
             }
