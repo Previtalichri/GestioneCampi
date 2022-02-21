@@ -3,6 +3,7 @@
         <h1> Benvenuti nella pagina Utente, qui e' possibile selezionare tutte le azioni che puoi e vuoi fare</h1>
         <input type="button" onclick="location.href='ricerca.jsp'" value="Cerca"/>
         <input type="button" onclick="location.href='elencoPren.jsp'" value="Elenco prenotazioni"/>
+        <input type="button" onclick="location.href='logOutUtente.jsp'" value="log out"/>
         <%@ page import="java.io.*" %>
         <%@ page import="java.sql.*" %>
         <%@ page import="java.util.*" %>
@@ -28,9 +29,9 @@
             try{
                 DateTimeFormatter form = DateTimeFormatter.ofPattern("dd/MM/yyyy");  
                 LocalDate oggi = LocalDate.now();   
-                System.out.println(oggi);    
                 HttpSession s = request.getSession();
                 utente = (String)s.getAttribute("username");
+                System.out.println(utente);
                 connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
                 Statement st = connection.createStatement();
                 dataQuery = "SELECT data FROM Prenotazioni WHERE Utente = '"+utente+"';";
