@@ -1,9 +1,11 @@
 <%@ page import="java.sql.Connection" %>
 <%@ page import="java.io.*" %>
-<%@ page import="java.sql.DriverManager" %>
+<!--<%@ page import="java.sql.DriverManager" %>
 <%@ page import="java.sql.Statement" %>
 <%@ page import="java.sql.SQLException" %>
-<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.ResultSet" %>  -->
+<%@ page import="java.sql.*" %>
+
 <%@ page import="java.math.BigInteger" %>
 <%@ page import="java.security.MessageDigest" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -77,10 +79,13 @@
             MD5Util md = new MD5Util();
             String cri = md.encrypt(psw); //hash della password
 	    
-            String query = "SELECT username,password,provincia FROM Gestori WHERE username = '"+user+"'AND password = '"+cri+"'AND provincia = '"+prov+"';"; 
-            
-            Statement st = connection.createStatement();
-            result = st.executeQuery(query);
+            //String query = "SELECT username,password,provincia FROM Gestori WHERE username = '"+user+"'AND password = '"+cri+"'AND provincia = '"+prov+"';"; 
+            String query = "SELECT username,password,provincia FROM Gestori WHERE username = ? AND password = ? AND provincia = ?;"; 
+            PreparedStatement pr = connection.prepareStatement(query);  
+            pr.setString(1,user);
+            pr.setString(2,cri);
+            pr.setString(3,prov);
+            result = pr.executeQuery(query);
             
             if(result.next()){  
                 s.setAttribute("username",user); 

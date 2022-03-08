@@ -1,9 +1,11 @@
 <%@ page import="java.sql.Connection" %>
 <%@ page import="java.io.*" %>
-<%@ page import="java.sql.DriverManager" %>
+<!--<%@ page import="java.sql.DriverManager" %>
 <%@ page import="java.sql.Statement" %>
 <%@ page import="java.sql.SQLException" %>
-<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.ResultSet" %> -->
+<%@ page import="java.sql.*" %>
+
 <%@ page import="java.math.BigInteger" %>
 <%@ page import="java.security.MessageDigest" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -49,10 +51,11 @@
             MD5Util md = new MD5Util();
             String cri = md.encrypt(psw); //hash della password
             connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
-            String query = "SELECT username,password FROM Utenti WHERE username = '"+user+"'AND password = '"+cri+"';";    
-            
-            Statement st = connection.createStatement();
-            ResultSet result = st.executeQuery(query);
+            String query = "SELECT username,password FROM Utenti WHERE username = ? AND password = ?;"; 
+            PreparedStatement pr = connection.prepareStatement(query);  
+            pr.setString(1,user);
+            pr.setString(2,cri);
+            ResultSet result = pr.executeQuery();
             
             if(result.next()){     
                 s.setAttribute("username",user); // imposta i valori di sessioni    
