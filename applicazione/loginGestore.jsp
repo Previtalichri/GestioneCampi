@@ -11,7 +11,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <body>
-
         <h1>Benvenuti nella pagina di login di un gestore</h1>
             <form action="loginGestore.jsp" method="POST">
             <input type="text" id="username" name="username" placeholder="username">
@@ -85,9 +84,9 @@
             pr.setString(1,user);
             pr.setString(2,cri);
             pr.setString(3,prov);
-            result = pr.executeQuery(query);
+            ResultSet r = pr.executeQuery();
             
-            if(result.next()){  
+            if(r.next()){  
                 s.setAttribute("username",user); 
 		        s.setAttribute("provincia",prov);       
                 response.sendRedirect("Gestore.html"); 
