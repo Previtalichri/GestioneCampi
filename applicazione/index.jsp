@@ -8,7 +8,7 @@
     <%@ page import="java.util.*" %>
     <%@ page contentType="text/html;charset=UTF-8" language="java" %>
     <%@ page import="net.ucanaccess.jdbc.UcanaccessSQLException" %>
-      <a href="ricercaGuest.jsp">Clicca qui per cercare un campo :)</a>
+      <a href="ricercaGuest.jsp">Clicca qui per cercare un campo</a>
       <h1>Registrazione gestore</h1>
       <form action="registrazioneGestore.jsp" method="POST">
         <input type="text" id="uernameEn" name="usernameEn" placeholder="username" requiered>
@@ -44,7 +44,7 @@
         <input type="submit" id="btn" name="btn" value="registrati">
       </form>
 
-      <a href="loginGestore.jsp">Hai gia un account?</a>
+      <a href="login.jsp">Hai gia un account?</a>
 
       <br>
 
@@ -54,7 +54,7 @@
         <input type="password" id="passwordUt" name="passwordUt" placeholder="password" required>
         <input type="submit" id="btn" name="btn" value="registrati">
       </form>
-      <a href="loginUtente.jsp">Hai gia un account?</a>
+      <a href="login.jsp">Hai gia un account?</a>
 
   </body>
 </html>

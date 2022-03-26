@@ -5,7 +5,7 @@
         try{
             HttpSession s = request.getSession();         
             s.invalidate() ;
-            String url = "loginUtente.jsp";
+            String url = "login.jsp";
             response.sendRedirect(url);
         }
         catch(Exception e){

@@ -47,14 +47,14 @@
                 {
                     out.println("Username e provincia gia registrati, immettere un'altro username");
                     out.println("<br><br>");
-                    out.println("<a href='index.html'>Premi qui per tornare al login</a>");
+                    out.println("<a href='index.jsp'>Premi qui per tornare al login</a>");
                 }
                 else{
                     MD5Util md = new MD5Util();
                     String cri = md.encrypt(psw);//hash della password
                     String query = "INSERT INTO Gestori(username,password,provincia) VALUES('"+user+"','"+cri+"','"+prov+"')";  
                     s.executeUpdate(query);
-                    String url = "loginGestore.jsp";
+                    String url = "login.jsp";
                     response.sendRedirect(url);     
                 }           
             }

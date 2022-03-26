@@ -53,7 +53,7 @@
                     String query = "INSERT INTO Utenti(username,password) VALUES('"+user+"','"+cri+"')";  
                     st = connection.createStatement();  
                     st.executeUpdate(query);
-                    String url = "loginUtente.jsp";
+                    String url = "login.jsp";
                     response.sendRedirect(url);
                 }              
             }
