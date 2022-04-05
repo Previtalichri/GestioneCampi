@@ -31,24 +31,30 @@
                 LocalDate oggi = LocalDate.now();   
                 HttpSession s = request.getSession();
                 utente = (String)s.getAttribute("username");
-                System.out.println(utente);
-                connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
-                Statement st = connection.createStatement();
-                dataQuery = "SELECT data FROM Prenotazioni WHERE Utente = '"+utente+"';";
-                boolean isbefore=false; 
-                ResultSet r = st.executeQuery(dataQuery); 
-                LocalDate data=null;      
-                String dataDb = null;         
-                while(r.next()){
-                    dataDb = r.getString(1);
-                    data = LocalDate.parse(dataDb,form);
-                    isbefore = data.isBefore(oggi);
-                    if(isbefore){
-                        eliminazione = "DELETE * FROM Prenotazioni WHERE Utente = '"+utente+"' AND data = '"+dataDb+"';";
-                        st.executeUpdate(eliminazione);
+                String ruolo = (String)s.getAttribute("ruolo");  
+                if(ruolo == "gestore"){
+                    response.sendRedirect("Gestore.jsp"); 
+                }
+                else{
+                    connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
+                    Statement st = connection.createStatement();
+                    dataQuery = "SELECT data FROM Prenotazioni WHERE Utente = '"+utente+"';";
+                    boolean isbefore=false; 
+                    ResultSet r = st.executeQuery(dataQuery); 
+                    LocalDate data=null;      
+                    String dataDb = null;         
+                    while(r.next()){
+                        dataDb = r.getString(1);
+                        data = LocalDate.parse(dataDb,form);
+                        isbefore = data.isBefore(oggi);
+                        if(isbefore){
+                            eliminazione = "DELETE * FROM Prenotazioni WHERE Utente = '"+utente+"' AND data = '"+dataDb+"';";
+                            st.executeUpdate(eliminazione);
 
-                    }  
-                    }      
+                        }  
+                        }      
+                }
+                
             }
             catch(Exception e){
                 System.out.println(e);

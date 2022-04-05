@@ -31,14 +31,22 @@
             try{
                 HttpSession s = request.getSession();
                 gestore = (String)s.getAttribute("username");
-                connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
-                Statement st = connection.createStatement();
-                queryProv = "SELECT provincia FROM Gestori WHERE username = '"+gestore+"';";
-                ResultSet r = st.executeQuery(queryProv);   
-                while(r.next()){
-                    prov = r.getString(1);
-                    s.setAttribute("provincia",prov); // imposta i valori di sessioni    
+                String ruolo = (String)s.getAttribute("ruolo");  
+                if(ruolo == "utente"){
+                    response.sendRedirect("Utente.jsp"); 
                 }
+                    
+                else{
+                    connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
+                    Statement st = connection.createStatement();
+                    queryProv = "SELECT provincia FROM Gestori WHERE username = '"+gestore+"';";
+                    ResultSet r = st.executeQuery(queryProv);   
+                    while(r.next()){
+                        prov = r.getString(1);
+                        s.setAttribute("provincia",prov); // imposta i valori di sessioni    
+                    }
+                }
+               
             }
             catch(Exception e){
                 System.out.println(e);

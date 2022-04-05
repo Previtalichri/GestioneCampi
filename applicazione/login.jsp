@@ -65,19 +65,20 @@
             
             if(resultUtenti.next()){     
                 s.setAttribute("username",user); // imposta i valori di sessioni    
+                s.setAttribute("ruolo","utente"); // imposta i valori di sessioni   
                 response.sendRedirect("Utente.jsp"); 
                 
             }
             else if(resultGestori.next()){
-                s.setAttribute("username",user); // imposta i valori di sessioni    
+                s.setAttribute("username",user); // imposta i valori di sessioni  
+                s.setAttribute("ruolo","gestore"); // imposta i valori di sessioni     
                 response.sendRedirect("Gestore.jsp"); 
 
             }
             else{
                 if((user != null) && (psw != null)){
                     out.println("<h1>Credenziali errate</h1>");
-                }
-                
+                }  
             }
         }
         catch(Exception e){

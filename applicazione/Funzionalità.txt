@@ -1,1 +1,20 @@
 Tutte le funzionalità operative, con l'utilizzo di sessioni
+PARTE UTENTE
+	- registrazione
+	- login
+	- ricercaGuest
+	- ricerca
+	- prenotazione
+	- elencoPren
+	- rimozionePren
+	- logOut
+
+PARTE GESTORE
+	- registrazione
+	- login	
+	- disposizione
+	- elencoCamp
+	- elencoPren
+	- logOut
+
+	
