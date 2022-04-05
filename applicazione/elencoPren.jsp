@@ -19,6 +19,10 @@
         <%@ page import="java.util.*" %>
         <%@ page contentType="text/html;charset=UTF-8" language="java" %>
         <%@ page import="net.ucanaccess.jdbc.UcanaccessSQLException" %>
+        <%@ page import="java.text.*" %>
+        <%@ page import="java.util.Date" %>
+        <%@ page import="java.time.format.DateTimeFormatter" %>
+        <%@ page import="java.time.LocalDate" %>
         <%
             String DRIVER = "net.ucanaccess.jdbc.UcanaccessDriver";
             Connection connection=null;
@@ -30,11 +34,16 @@
                 out.println("Errore: Impossibile caricare il Driver Ucanaccess");
             }
             try{
+                DateTimeFormatter form = DateTimeFormatter.ofPattern("dd/MM/yyyy");  
+                LocalDate oggi = LocalDate.now();   
                 HttpSession s = request.getSession();
                 String User = (String)s.getAttribute("username"); 
                 connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
                 ricerca = "SELECT Sede,Utente,orario,data FROM Prenotazioni WHERE Utente = '"+User+"';";
                 Statement st = connection.createStatement();
+                boolean isbefore=false; 
+                LocalDate data=null;      
+                String dataDb = null;
                 ResultSet r = st.executeQuery(ricerca);        
                 if(User != null){                                                
                         out.println("<table>"); 
@@ -46,6 +55,12 @@
                             out.println("</tr>"); 
                             out.println("</table>");
                             while(r.next()){
+                                dataDb = r.getString(4);
+                                data = LocalDate.parse(dataDb,form);
+                                isbefore = data.isBefore(oggi);
+                                if(isbefore){
+                                }
+                                else{
                                 out.println("<table>"); 
                                     out.println("<tr>");
                                         out.println("<td>"+r.getString(1)+"</td>");
@@ -54,6 +69,7 @@
                                         out.print("<td><a href='rimozionePren.jsp?sede="+r.getString(1)+"&orario="+r.getString(3)+"&data="+r.getString(4)+"'>Rimuovi</a></td>");
                                     out.println("</tr>");
                                 out.println("</table>");
+                                }
                             }    
                 }  
             }                   

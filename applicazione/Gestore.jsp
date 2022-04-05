@@ -5,6 +5,7 @@
         <h1> Benvenuti nella pagina entita, qui e' possibile selezionare tutte le azioni che puoi e vuoi fare</h1>
         <input type="button" onclick="location.href='disposizione.jsp'" value="Metti a disposizione un campo"/>
         <input type="button" onclick="location.href='elencoCamp.jsp'" value="Visualizza i campi messi a disposizione"/>
+        <input type="button" onclick="location.href='elencoPrenGestore.jsp'" value="Visualizza le prenotazione degli utenti"/>
         <input type="button" onclick="location.href='logOutGestore.jsp'" value="log out"/>
         <%@ page import="java.io.*" %>
         <%@ page import="java.sql.*" %>
