@@ -26,6 +26,11 @@
                         Connection connection=null;
                         String sportQuery=null;
                         String provQuery=null;
+                        HttpSession sess = request.getSession();
+                        String ruolo = (String)sess.getAttribute("ruolo");
+                            if (ruolo == null){
+                    		response.sendRedirect("login.jsp");
+                	    }
                         try{
                             Class.forName(DRIVER);
                         }
@@ -108,5 +113,6 @@
                 out.println(e);
             }      
         %>
+        <input type="button" onclick="location.href='Utente.jsp'" value="Home"/>
     </body>
 </html>

@@ -2,11 +2,11 @@
 
 <html>
     <body>
-        <h1> Benvenuti nella pagina entita, qui e' possibile selezionare tutte le azioni che puoi e vuoi fare</h1>
+        <h1> Benvenuti nella pagina Gestore, qui e' possibile selezionare tutte le azioni che puoi e vuoi fare</h1>
         <input type="button" onclick="location.href='disposizione.jsp'" value="Metti a disposizione un campo"/>
         <input type="button" onclick="location.href='elencoCamp.jsp'" value="Visualizza i campi messi a disposizione"/>
         <input type="button" onclick="location.href='elencoPrenGestore.jsp'" value="Visualizza le prenotazione degli utenti"/>
-        <input type="button" onclick="location.href='logOutGestore.jsp'" value="log out"/>
+        <input type="button" onclick="location.href='logOut.jsp'" value="log out"/>
         <%@ page import="java.io.*" %>
         <%@ page import="java.sql.*" %>
         <%@ page import="java.util.*" %>
@@ -36,6 +36,9 @@
                 if(ruolo == "utente"){
                     response.sendRedirect("Utente.jsp"); 
                 }
+		        else if (ruolo == null){
+                    response.sendRedirect("login.jsp");
+                }
                     
                 else{
                     connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
@@ -52,7 +55,7 @@
             catch(Exception e){
                 System.out.println(e);
             }
-            System.out.println(prov);
+            
             
         %>
 

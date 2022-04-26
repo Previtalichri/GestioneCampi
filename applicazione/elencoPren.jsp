@@ -38,6 +38,10 @@
                 LocalDate oggi = LocalDate.now();   
                 HttpSession s = request.getSession();
                 String User = (String)s.getAttribute("username"); 
+                String ruolo = (String)s.getAttribute("ruolo");
+                if (ruolo == null){
+                    response.sendRedirect("login.jsp");
+                }
                 connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
                 ricerca = "SELECT Sede,Utente,orario,data FROM Prenotazioni WHERE Utente = '"+User+"';";
                 Statement st = connection.createStatement();
@@ -75,7 +79,9 @@
             }                   
             catch(Exception e){
                 out.println(e);
-            }      
+            }    
+              
         %>
+        <br><input type="button" onclick="location.href='Utente.jsp'" value="Home"/>
     </body>
 </html>

@@ -37,6 +37,10 @@
                 DateTimeFormatter form = DateTimeFormatter.ofPattern("dd/MM/yyyy");  
                 LocalDate oggi = LocalDate.now();   
                 HttpSession s = request.getSession();
+                String ruolo = (String)s.getAttribute("ruolo");
+                if (ruolo == null){
+                    response.sendRedirect("login.jsp");
+                }
                 String sede = (String)s.getAttribute("username"); 
                 connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
                 ricerca = "SELECT Sede,Utente,orario,data FROM Prenotazioni WHERE Sede = '"+sede+"';";
@@ -75,6 +79,6 @@
                 out.println(e);
             }      
         %>
-        <a href='Gestore.jsp'>Clicca qui per tornare alla home</a>
+        <br><input type="button" onclick="location.href='Gestore.jsp'" value="Home"/>
     </body>
 </html>

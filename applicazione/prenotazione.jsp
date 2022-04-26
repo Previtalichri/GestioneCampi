@@ -53,6 +53,10 @@
                         String sede = request.getParameter("sede");   
                         HttpSession sess = request.getSession();
                         User = (String)sess.getAttribute("username");
+			String ruolo = (String)s.getAttribute("ruolo");
+                        if (ruolo == null){
+                    		response.sendRedirect("login.jsp");
+                	}
                         connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
                         Statement st = connection.createStatement();                        
                         String verifica = "SELECT Sede,orario,data FROM Prenotazioni WHERE Sede = '"+sede+"' AND orario = '"+orario+"' AND data= '"+Data+"';";

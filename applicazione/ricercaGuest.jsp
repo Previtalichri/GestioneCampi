@@ -28,6 +28,11 @@
                         Connection connection=null;
                         String sportQuery=null;
                         String provQuery=null;
+                        HttpSession s = request.getSession();
+                        String ruolo = (String)s.getAttribute("provincia");
+                            if (ruolo == null){
+                    		response.sendRedirect("login.jsp");
+                	    }
                         try{
                             Class.forName(DRIVER);
                         }

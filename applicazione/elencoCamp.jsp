@@ -35,6 +35,11 @@
                 HttpSession s = request.getSession();
                 User = (String)s.getAttribute("username");
                 prov = (String)s.getAttribute("provincia");
+                String ruolo = (String)s.getAttribute("ruolo");
+                if (ruolo == null){
+                    response.sendRedirect("login.jsp");
+                }
+                
                 connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
                 ricerca = "SELECT Sede,Comune,Via,Numero,Sport FROM Struttura WHERE Sede = '"+User+"';";
                 Statement st = connection.createStatement();
@@ -71,5 +76,6 @@
             } 
 
         %>
+        <br><input type="button" onclick="location.href='Gestore.jsp'" value="Home"/>
     </body>
 </html>

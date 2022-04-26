@@ -30,6 +30,10 @@
                             out.println("</select>"); 
                             HttpSession s = request.getSession();
                             prov=(String)s.getAttribute("provincia"); 
+			    String ruolo = (String)s.getAttribute("ruolo");
+                            if (ruolo == null){
+                    		response.sendRedirect("login.jsp");
+                	    }
                             comuneQuery = "SELECT nome,provincia FROM Comuni WHERE provincia = '"+prov+"';"; 
                             result = st.executeQuery(comuneQuery);
                             out.println("<select name='comune' id ='comune'>");
@@ -87,5 +91,6 @@
                         response.sendRedirect(url);
                     } 
                 %>
+                 <input type="button" onclick="location.href='Gestore.jsp'" value="Home"/>
     </body>
 </html>
