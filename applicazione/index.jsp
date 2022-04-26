@@ -26,6 +26,7 @@
           switch(type){
           case "utente":
             out.println("<form action='registrazioneUtente.jsp' method='POST'>");
+	          out.println("<input type='text' id='email' name='email' placeholder='email' required>");
             out.println("<input type='text' id='uernameUt' name='usernameUt' placeholder='username' required>");
             out.println("<input type='password' id='passwordUt' name='passwordUt' placeholder='password' required>");
             out.println("<input type='submit' id='btn' name='btn' value='registrati'>");
@@ -34,6 +35,7 @@
 
           case "gestore":
             out.println("<form action='registrazioneGestore.jsp' method='POST'>");
+            out.println("<input type='text' id='email' name='email' placeholder='email' required>");
             out.println("<input type='text' id='uernameEn' name='usernameEn' placeholder='username' requiered>");
             out.println("<input type='password' id='passwordEn' name='passwordEn' placeholder='password' required>");
             String DRIVER = "net.ucanaccess.jdbc.UcanaccessDriver";

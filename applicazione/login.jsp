@@ -14,7 +14,7 @@
         <h1>Benvenuti nella pagina di login</h1>
         <form action="login.jsp" method="POST">
             <input type="text" id="username" name="username" placeholder="username" required>
-            <input type="text" id="password" name="password" placeholder="password" required>
+            <input type="password" id="password" name="password" placeholder="password" required>
             <input type="submit" id="btn" name="btn" value="Accedi">
         </form>
 

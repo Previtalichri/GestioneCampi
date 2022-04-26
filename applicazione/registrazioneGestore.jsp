@@ -37,6 +37,7 @@
             try{
 				user = request.getParameter("usernameEn");
 				psw = request.getParameter("passwordEn");
+                email = request.getParameter("email");
                 prov = (request.getParameter("provincia")).toUpperCase();
                 
                 connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
@@ -52,7 +53,7 @@
                 else{
                     MD5Util md = new MD5Util();
                     String cri = md.encrypt(psw);//hash della password
-                    String query = "INSERT INTO Gestori(username,password,provincia) VALUES('"+user+"','"+cri+"','"+prov+"')";  
+                    String query = "INSERT INTO Gestori(username,password,provincia,email) VALUES('"+user+"','"+cri+"','"+prov+"','"+email+"')";  
                     s.executeUpdate(query);
                     String url = "login.jsp";
                     response.sendRedirect(url);     

@@ -26,6 +26,7 @@
             String DRIVER = "net.ucanaccess.jdbc.UcanaccessDriver";
             String user=null;
             String psw=null;
+            String email = null;
             Connection connection=null;
             try{
                 Class.forName(DRIVER);
@@ -36,6 +37,7 @@
             try{
                 user = request.getParameter("usernameUt");
                 psw = request.getParameter("passwordUt");
+                email = request.getParameter("email");
                 connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
                 String verifica = "SELECT username from Utenti WHERE username = '"+user+"';";
                 Statement st = connection.createStatement();
@@ -50,7 +52,7 @@
 
                     MD5Util md = new MD5Util();
                     String cri = md.encrypt(psw);//hash della password
-                    String query = "INSERT INTO Utenti(username,password) VALUES('"+user+"','"+cri+"')";  
+                    String query = "INSERT INTO Utenti(username,password,email) VALUES('"+user+"','"+cri+"','"+email+"')";  
                     st = connection.createStatement();  
                     st.executeUpdate(query);
                     String url = "login.jsp";
