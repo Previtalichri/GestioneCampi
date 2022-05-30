@@ -16,8 +16,7 @@
                 <%
                     String DRIVER = "net.ucanaccess.jdbc.UcanaccessDriver";
                     Connection connection=null;
-                        
-                    String User=null;
+            
                     String query;
                     try{
                         Class.forName(DRIVER);
@@ -52,8 +51,8 @@
                         String Data=request.getParameter("data");
                         String sede = request.getParameter("sede");   
                         HttpSession sess = request.getSession();
-                        User = (String)sess.getAttribute("username");
-			String ruolo = (String)s.getAttribute("ruolo");
+                        String User = (String)sess.getAttribute("username");
+			            String ruolo = (String)sess.getAttribute("ruolo");
                         if (ruolo == null){
                     		response.sendRedirect("login.jsp");
                 	}
