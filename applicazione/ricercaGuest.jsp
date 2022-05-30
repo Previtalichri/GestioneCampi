@@ -27,12 +27,7 @@
                         String DRIVER = "net.ucanaccess.jdbc.UcanaccessDriver";
                         Connection connection=null;
                         String sportQuery=null;
-                        String provQuery=null;
-                        HttpSession s = request.getSession();
-                        String ruolo = (String)s.getAttribute("provincia");
-                            if (ruolo == null){
-                    		response.sendRedirect("login.jsp");
-                	    }
+                        String provQuery=null;  
                         try{
                             Class.forName(DRIVER);
                         }
@@ -82,8 +77,8 @@
                 connection = DriverManager.getConnection("jdbc:ucanaccess://" + request.getServletContext().getRealPath("/") + "Prenotazione.accdb");
 		
                 ricerca = "SELECT Sede,Provincia,Comune,Via,Numero,Sport FROM Struttura WHERE sport = '"+Sport+"'AND Provincia = '"+prov+"';";
-                Statement s = connection.createStatement();
-                ResultSet r = s.executeQuery(ricerca);           
+                Statement stat = connection.createStatement();
+                ResultSet r = stat.executeQuery(ricerca);           
                 if((Sport != null) && (prov != null)){                                                    
                         out.println("<table>"); 
                         out.println("<tr>");
