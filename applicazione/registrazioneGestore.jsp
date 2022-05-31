@@ -27,6 +27,7 @@
 			String user=null;
 			String psw=null;
             String prov=null;
+	    String email=null;
 			Connection connection=null;
             try{
                 Class.forName(DRIVER);
