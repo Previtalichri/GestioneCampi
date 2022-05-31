@@ -87,7 +87,7 @@
                         out.println(e);
                     }
                     if((user !=null) && (prov != null) && (Sport != null) && (Comune != null) && (Via != null) && (num != null)){
-                        String url = "Gestore.html";
+                        String url = "Gestore.jsp";
                         response.sendRedirect(url);
                     } 
                 %>
